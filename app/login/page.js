@@ -45,6 +45,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-blue-50 px-4">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-6">
         <h1 className="text-2xl font-bold text-blue-700 text-center">Login ke NginepAja</h1>
+        {/* NOTE: Akun admin: admin@gmail.com | admin123 */}
 
         {/* 🔐 Google Login */}
         <button
