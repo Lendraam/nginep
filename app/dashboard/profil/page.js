@@ -57,8 +57,8 @@ export default function ProfilPage() {
       const data = await res.json();
       if (res.ok) {
         alert('Profil berhasil diperbarui!');
-        // Force refresh session NextAuth agar foto langsung update
         await fetch('/api/auth/session?update', { method: 'POST' });
+        await signIn('credentials', { redirect: false });
         router.refresh();
       } else {
         alert(data.message || 'Gagal menyimpan data.');
