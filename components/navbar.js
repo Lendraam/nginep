@@ -1,17 +1,26 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
-  Menu, X, Home, Info, CalendarDays, LayoutDashboard, LogIn, LogOut, BedDouble,
+  Menu, X, Home, Info, CalendarDays, LayoutDashboard, LogIn, LogOut, BedDouble, Moon, Sun,
 } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dark, setDark] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [dark]);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -96,6 +105,15 @@ export default function Navbar() {
               <LogIn size={18} /> Login
             </button>
           )}
+
+          {/* DARK MODE TOGGLE BUTTON */}
+          <button
+            onClick={() => setDark(!dark)}
+            className="ml-2 p-2 rounded-full border border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            aria-label="Toggle Dark Mode"
+          >
+            {dark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
         </nav>
       </div>
     </header>
