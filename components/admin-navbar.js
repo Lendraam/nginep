@@ -24,7 +24,7 @@ export default function AdminNavbar() {
         <div className="flex items-center gap-3">
           {session.user.image ? (
             <img
-              src={session.user.image}
+              src={session.user.image.startsWith('/api/user/photo') ? session.user.image : `/api/user/photo?email=${encodeURIComponent(session.user.email)}`}
               alt="Foto Admin"
               className="w-8 h-8 rounded-full object-cover border border-blue-300"
             />

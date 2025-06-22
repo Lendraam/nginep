@@ -66,7 +66,7 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               {session.user.image ? (
                 <img
-                  src={session.user.image}
+                  src={session.user.image.startsWith('/api/user/photo') ? session.user.image : `/api/user/photo?email=${encodeURIComponent(session.user.email)}`}
                   alt="Foto Profil"
                   className="w-8 h-8 rounded-full object-cover border border-blue-300"
                 />
