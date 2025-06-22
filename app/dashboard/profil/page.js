@@ -23,7 +23,12 @@ export default function ProfilPage() {
     if (session) {
       setName(session.user.name || '');
       setEmail(session.user.email || '');
-      setPreview(session.user.image || '');
+      // Ganti preview menjadi API image jika ada
+      if (session.user.email) {
+        setPreview(`/api/user/photo?email=${encodeURIComponent(session.user.email)}`);
+      } else {
+        setPreview(session.user.image || '');
+      }
       setBirthdate(session.user.birthdate || '');
       setNik(session.user.nik || '');
     }

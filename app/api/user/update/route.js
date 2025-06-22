@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/authOptions';
-import { writeFile } from 'fs/promises';
-import path from 'path';
 
 export const runtime = 'nodejs';
 
@@ -16,14 +14,13 @@ export async function POST(req) {
   const formData = await req.formData();
   const name = formData.get('name');
   const photo = formData.get('photo');
-  let photoPath = null;
+  let imageData = null;
+  let imageType = null;
 
   if (photo && typeof photo === 'object' && photo.arrayBuffer) {
     const buffer = Buffer.from(await photo.arrayBuffer());
-    const filename = `${Date.now()}-${photo.name}`;
-    const filepath = path.join(process.cwd(), 'public/uploads', filename);
-    await writeFile(filepath, buffer);
-    photoPath = `/uploads/${filename}`;
+    imageData = buffer;
+    imageType = photo.type;
   }
 
   const client = await clientPromise;
@@ -33,7 +30,7 @@ export async function POST(req) {
     {
       $set: {
         name,
-        ...(photoPath && { image: photoPath }),
+        ...(imageData && { imageData, imageType }),
       },
     }
   );
