@@ -1,26 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
-  Menu, X, Home, Info, CalendarDays, LayoutDashboard, LogIn, LogOut, BedDouble, Moon, Sun,
+  Menu, X, Home, Info, CalendarDays, LayoutDashboard, LogIn, LogOut, BedDouble,
 } from 'lucide-react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dark, setDark] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
-
-  useEffect(() => {
-    if (dark) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [dark]);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -75,9 +66,10 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               {session.user.image ? (
                 <img
-                  src={session.user.image.startsWith('/api/user/photo') ? session.user.image : `/api/user/photo?email=${encodeURIComponent(session.user.email)}`}
+                  src={session.user.image}
                   alt="Foto Profil"
                   className="w-8 h-8 rounded-full object-cover border border-blue-300"
+                  onError={e => { e.target.onerror = null; e.target.src = '/file.svg'; }}
                 />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-lg text-blue-400">?</div>
@@ -105,15 +97,6 @@ export default function Navbar() {
               <LogIn size={18} /> Login
             </button>
           )}
-
-          {/* DARK MODE TOGGLE BUTTON */}
-          <button
-            onClick={() => setDark(!dark)}
-            className="ml-2 p-2 rounded-full border border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-            aria-label="Toggle Dark Mode"
-          >
-            {dark ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
         </nav>
       </div>
     </header>
