@@ -1,8 +1,28 @@
-import { getAllBookings } from './fetchBookings';
+import { useEffect, useState } from 'react';
 import BookingTableWrapper from './BookingTableWrapper';
 
-export default async function AdminKelolaBookingPage() {
-  const bookings = await getAllBookings();
+export default function AdminKelolaBookingPage() {
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchBookings() {
+      try {
+        const res = await fetch('/api/all-bookings');
+        const data = await res.json();
+        setBookings(data.bookings || []);
+      } catch (err) {
+        setError('Gagal memuat data');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBookings();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <main className="min-h-screen bg-blue-50 p-8">
